@@ -1,0 +1,38 @@
+<div class="libro-detalle libro-detalle-container">
+  <ng-container *ngIf="loading">
+    <div class="loading-icon"><span class="material-icons">hourglass_top</span> Cargando...</div>
+  </ng-container>
+  <ng-container *ngIf="error">
+    <div class="error-icon"><span class="material-icons">error</span> {{ error }}</div>
+  </ng-container>
+  <ng-container *ngIf="!loading && libro">
+    <button class="volver-btn" (click)="volver()">
+      <span class="material-icons">arrow_back</span> Volver
+    </button>
+    <div class="libro-detalle-flex">
+      <img [src]="libro.image ? '/api/uploads/libros/' + libro.image : 'assets/default-cover.png'" alt="Portada" class="libro-img-grande">
+      <div class="libro-detalle-info">
+        <h2><span class="material-icons libro-titulo-icon">auto_stories</span> {{ libro.titulo }}</h2>
+        <div class="libro-info-row"><span class="material-icons info-icon">business</span> <b>Editorial:</b> {{ libro.editorial }}</div>
+        <div class="libro-info-row"><span class="material-icons info-icon">category</span> <b>Género:</b> {{ libro.genero_nombre }}</div>
+        <div class="libro-info-row"><span class="material-icons info-icon">inventory_2</span> <b>Cantidad:</b> {{ libro.cantidad }}</div>
+        <div class="libro-info-row"><span class="material-icons info-icon">tag</span> <b>ID:</b> {{ libro.libroID }}</div>
+        <div class="libro-info-row modern-valoracion">
+          <span class="material-icons valoracion-icon" *ngFor="let star of [1,2,3,4,5]">
+            {{ getStarType(star, libro.promedio_valoracion) }}
+          </span>
+          <span class="valoracion-num">
+            {{ libro.promedio_valoracion ? libro.promedio_valoracion.toFixed(2) : '0.00' }} / 5
+          </span>
+        </div>
+        <button (click)="pedirPrestamo()" [disabled]="libro.cantidad <= 0" class="pedir-btn">
+          <span class="material-icons">shopping_cart</span> Pedir préstamo
+        </button>
+        <div *ngIf="success" class="success"><span class="material-icons">check_circle</span> {{ success }}</div>
+        <div *ngIf="error" class="error"><span class="material-icons">error</span> {{ error }}</div>
+        <!-- Solo importa el componente de reseñas -->
+        <app-resena [libroID]="libro.libroID"></app-resena>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,51 @@
+<div class="admin-libros">
+  <h2>Administración de Préstamos</h2>
+  <div *ngIf="loading">Cargando préstamos...</div>
+  <div *ngIf="error">{{ error }}</div>
+  <table *ngIf="!loading && prestamos.length">
+    <thead>
+      <tr>
+        
+        <th>Libro</th>
+        <th>Usuario</th>
+        <th>Fecha Entrega</th>
+        <th>Fecha Devolución</th>
+        <th>Devuelto</th>
+        <th>Estado</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of prestamos">
+        
+        <td>{{ p.libro_titulo }}</td>
+        <td>{{ p.usuario_nombre }} {{ p.usuario_apellido }}</td>
+        <td>
+          <input *ngIf="authService.isBibliotecario && !p.fecha_devuelta" type="date" [value]="p.fecha_entrega | date:'yyyy-MM-dd'" (change)="actualizarFecha(p, 'fecha_entrega', $event)" />
+          <span *ngIf="!authService.isBibliotecario || p.fecha_devuelta">{{ p.fecha_entrega | date:'dd/MM/yyyy' }}</span>
+        </td>
+        <td>
+          <input *ngIf="authService.isBibliotecario && !p.fecha_devuelta" type="date" [value]="p.fecha_devolucion | date:'yyyy-MM-dd'" (change)="actualizarFecha(p, 'fecha_devolucion', $event)" />
+          <span *ngIf="!authService.isBibliotecario || p.fecha_devuelta">{{ p.fecha_devolucion | date:'dd/MM/yyyy' }}</span>
+        </td>
+        <td>{{ p.fecha_devuelta ? (p.fecha_devuelta | date:'dd/MM/yyyy HH:mm') : 'No' }}</td>
+        <td>
+          <select *ngIf="authService.isBibliotecario && !p.fecha_devuelta" [(ngModel)]="p.estadoID" (change)="cambiarEstado(p)">
+            <option [value]="1">Pendiente</option>
+            <option [value]="2">Activo</option>
+          </select>
+          <span *ngIf="!authService.isBibliotecario || p.fecha_devuelta">{{ p.estado_nombre }}</span>
+        </td>
+        <td>
+          <button *ngIf="p.estadoID === 2 && !p.fecha_devuelta" (click)="marcarDevuelto(p)">Devuelto</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="!loading && !prestamos.length">No hay préstamos registrados.</div>
+  <div class="paginacion" *ngIf="pages > 1 && !loading">
+    <button (click)="anteriorPagina()" [disabled]="page === 1">Anterior</button>
+    <span>Página {{ page }} de {{ pages }}</span>
+    <button (click)="siguientePagina()" [disabled]="page === pages">Siguiente</button>
+  </div>
+</div>

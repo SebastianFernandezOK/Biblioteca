@@ -1,0 +1,90 @@
+<div class="admin-usuarios-container">
+  <h2>Administración de Usuarios</h2>
+
+  <!-- Formulario de alta de usuario -->
+  <form (ngSubmit)="crearUsuario()" #formNuevo="ngForm" class="form-alta">
+    <input required [(ngModel)]="nuevoUsuario.usuario_nombre" name="nombre" placeholder="Nombre" />
+    <input required [(ngModel)]="nuevoUsuario.usuario_apellido" name="apellido" placeholder="Apellido" />
+    <input required [(ngModel)]="nuevoUsuario.usuario_email" name="email" placeholder="Email" type="email" />
+    <input required [(ngModel)]="nuevoUsuario.usuario_telefono" name="telefono" placeholder="Teléfono" />
+    <input required [(ngModel)]="nuevoUsuario.usuario_contrasena" name="contrasena" placeholder="Contraseña" type="password" />
+    <select [(ngModel)]="nuevoUsuario.rol" name="rol">
+      <option value="">Rol (opcional)</option>
+      <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+    </select>
+    <button class="btn-accion" [disabled]="creando || !formNuevo.form.valid">
+      <span class="material-icons">person_add</span> Crear
+    </button>
+  </form>
+
+  <div *ngIf="loading">Cargando usuarios...</div>
+  <div *ngIf="error">{{ error }}</div>
+
+  <!-- Filtro por nombre -->
+  <div class="filtro-nombre-usuarios">
+    <input type="text" [(ngModel)]="filtroNombre" (keyup.enter)="aplicarFiltroNombre()" placeholder="Buscar por nombre..." />
+    <button class="btn-accion" (click)="aplicarFiltroNombre()">Buscar</button>
+  </div>
+
+  <div class="table-wrapper">
+    <table *ngIf="!loading && usuarios.length">
+      <thead>
+        <tr>
+          <th>Datos</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuarios; let i = index">
+          <td>
+            <div class="usuario-datos-horizontal">
+              <ng-container *ngIf="editIndex !== i">
+                <span><strong>Nombre:</strong> {{ u.usuario_nombre }}</span>
+                <span class="sep">|</span>
+                <span><strong>Apellido:</strong> {{ u.usuario_apellido }}</span>
+                <span class="sep">|</span>
+                <span><strong>Email:</strong> {{ u.usuario_email }}</span>
+                <span class="sep">|</span>
+                <span><strong>Teléfono:</strong> {{ u.usuario_telefono }}</span>
+                <span class="sep">|</span>
+                <span><strong>Rol:</strong> 
+                  <span class="badge-rol" [ngClass]="u.rol ? u.rol : 'pendiente'">{{ u.rol || 'Pendiente' }}</span>
+                </span>
+              </ng-container>
+              <ng-container *ngIf="editIndex === i">
+                <input [(ngModel)]="editUsuario.usuario_nombre" placeholder="Nombre" name="editNombre{{i}}" />
+                <input [(ngModel)]="editUsuario.usuario_apellido" placeholder="Apellido" name="editApellido{{i}}" />
+                <input [(ngModel)]="editUsuario.usuario_email" placeholder="Email" name="editEmail{{i}}" />
+                <input [(ngModel)]="editUsuario.usuario_telefono" placeholder="Teléfono" name="editTel{{i}}" />
+                <select [(ngModel)]="editUsuario.rol" name="editRol{{i}}">
+                  <option value="">Pendiente</option>
+                  <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+                </select>
+              </ng-container>
+            </div>
+          </td>
+          <td>
+            <div class="acciones-columna">
+              <ng-container *ngIf="editIndex !== i">
+                <button class="btn-accion" (click)="iniciarEdicion(i)"><span class="material-icons">edit</span> Editar</button>
+                <button class="btn-accion" (click)="eliminarUsuario(i)"><span class="material-icons">delete</span> Eliminar</button>
+              </ng-container>
+              <ng-container *ngIf="editIndex === i">
+                <button class="btn-accion" (click)="guardarEdicion(i)"><span class="material-icons">save</span> Guardar</button>
+                <button class="btn-accion" (click)="cancelarEdicion()"><span class="material-icons">close</span> Cancelar</button>
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="paginacion-usuarios" *ngIf="total > per_page">
+    <button class="btn-paginacion-clasica" (click)="cambiarPagina(-1)" [disabled]="page === 1 || loading">Anterior</button>
+    <span class="indicador-pagina-clasica">
+      Página {{ page }} de {{ pageCount }}
+    </span>
+    <button class="btn-paginacion-clasica" (click)="cambiarPagina(1)" [disabled]="page >= pageCount || loading">Siguiente</button>
+  </div>
+  <div *ngIf="!loading && !usuarios.length">No hay usuarios registrados.</div>
+</div>

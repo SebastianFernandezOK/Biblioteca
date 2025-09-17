@@ -1,0 +1,56 @@
+<div class="profile profile-container">
+  <h2><span class="material-icons profile-icon">account_circle</span> Mi Perfil</h2>
+  <div *ngIf="usuario">
+    <!-- Foto de perfil -->
+    <div class="profile-photo">
+      <img [src]="getProfileImage()" alt="Foto de perfil" class="profile-img" />
+    </div>
+    <!-- Datos actuales o editables -->
+    <form *ngIf="editMode" [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-edit-form" enctype="multipart/form-data">
+      <div class="profile-info-row">
+        <span class="material-icons info-icon">badge</span> <b>ID:</b> {{ usuario.usuarioID }}
+      </div>
+      <div class="profile-info-row">
+        <span class="material-icons info-icon">person</span> <b>Nombre:</b>
+        <input formControlName="usuario_nombre" type="text" />
+      </div>
+      <div class="profile-info-row">
+        <span class="material-icons info-icon">person</span> <b>Apellido:</b>
+        <input formControlName="usuario_apellido" type="text" />
+      </div>
+      <div class="profile-info-row">
+        <span class="material-icons info-icon">email</span> <b>Email:</b>
+        <input formControlName="usuario_email" type="email" />
+      </div>
+      <div class="profile-info-row">
+        <span class="material-icons info-icon">call</span> <b>Teléfono:</b>
+        <input formControlName="usuario_telefono" type="text" />
+      </div>
+      <div class="profile-info-row">
+        <span class="material-icons info-icon">image</span> <b>Foto de perfil:</b>
+        <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+      </div>
+      <div class="profile-info-row">
+        <span class="material-icons info-icon">verified_user</span> <b>Rol:</b> {{ usuario.rol }}
+      </div>
+      <button type="submit" class="btn-guardar"><span class="material-icons">save</span> Guardar cambios</button>
+      <button type="button" class="btn-cancelar" (click)="onCancelEdit()"><span class="material-icons">cancel</span> Cancelar</button>
+      <div *ngIf="message" class="success"><span class="material-icons">check_circle</span> {{ message }}</div>
+      <div *ngIf="error" class="error"><span class="material-icons">error</span> {{ error }}</div>
+    </form>
+    <ng-container *ngIf="!editMode">
+      <div class="profile-info-row"><span class="material-icons info-icon">badge</span> <b>ID:</b> {{ usuario.usuarioID }}</div>
+      <div class="profile-info-row"><span class="material-icons info-icon">person</span> <b>Nombre:</b> {{ usuario.usuario_nombre }}</div>
+      <div class="profile-info-row"><span class="material-icons info-icon">person</span> <b>Apellido:</b> {{ usuario.usuario_apellido }}</div>
+      <div class="profile-info-row"><span class="material-icons info-icon">email</span> <b>Email:</b> {{ usuario.usuario_email }}</div>
+      <div class="profile-info-row"><span class="material-icons info-icon">call</span> <b>Teléfono:</b> {{ usuario.usuario_telefono }}</div>
+      <div class="profile-info-row"><span class="material-icons info-icon">image</span> <b>Foto de perfil:</b>
+        <img [src]="getProfileImage()" alt="Foto de perfil" class="profile-img-mini" />
+      </div>
+      <div class="profile-info-row"><span class="material-icons info-icon">verified_user</span> <b>Rol:</b> {{ usuario.rol }}</div>
+      <button class="btn-editar" (click)="onEdit()"><span class="material-icons">edit</span> Editar perfil</button>
+    </ng-container>
+    <button (click)="logout()"><span class="material-icons">logout</span> Cerrar sesión</button>
+  </div>
+  <div *ngIf="error && !usuario" class="error"><span class="material-icons">error</span> {{ error }}</div>
+</div>

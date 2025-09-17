@@ -1,0 +1,39 @@
+<div class="resenas-stack">
+  <div class="resena-form-card">
+    <h4><span class="material-icons">add_comment</span> Agregar tu reseña</h4>
+    <form (ngSubmit)="enviarResena()">
+      <label for="valoracion">Valoración:</label>
+      <div class="stars-input">
+        <span *ngFor="let v of [1,2,3,4,5]" (click)="valoracion = v" [class.selected]="valoracion >= v">
+          <span class="star">&#9733;</span>
+        </span>
+      </div>
+      <label for="comentario">Comentario:</label>
+      <textarea id="comentario" [(ngModel)]="comentario" name="comentario" rows="2" maxlength="100" required placeholder="Escribe tu reseña..." class="input-modern"></textarea>
+      <button type="submit" class="btn-modern">Enviar reseña</button>
+    </form>
+    <div *ngIf="resenaSuccess" class="success animate-fade-in"><span class="material-icons">check_circle</span> {{ resenaSuccess }}</div>
+    <div *ngIf="resenaError" class="error animate-fade-in"><span class="material-icons">error</span> {{ resenaError }}</div>
+  </div>
+  <div class="resenas-list-card">
+    <h3 class="resenas-title"><span class="material-icons">rate_review</span> Reseñas de usuarios</h3>
+    <div *ngIf="resenas.length === 0" class="no-resenas">Aún no hay reseñas para este libro.</div>
+    <div *ngFor="let r of resenas" class="resena-card animate-fade-in">
+      <div class="resena-header">
+        <div class="resena-avatar">
+          <img [src]="r.image ? '/api/uploads/users/' + r.image : 'assets/default-profile.png'" alt="Foto usuario" class="resena-user-img" />
+        </div>
+        <div class="resena-user-info">
+          <span class="resena-usuario">{{ r.usuario_nombre || ('Usuario ' + r.usuarioID) }}</span>
+          <span class="resena-stars">
+            <ng-container *ngFor="let s of [1,2,3,4,5]">
+              <span class="star" [class.filled]="s <= r.valoracion">&#9733;</span>
+            </ng-container>
+          </span>
+          <span *ngIf="r.fecha" class="resena-fecha">{{ r.fecha | date:'short' }}</span>
+        </div>
+      </div>
+      <div class="resena-comentario">{{ r.comentario }}</div>
+    </div>
+  </div>
+</div>

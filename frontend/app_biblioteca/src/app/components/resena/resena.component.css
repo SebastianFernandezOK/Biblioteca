@@ -1,0 +1,135 @@
+.resenas-container {
+  margin-top: 32px;
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  animation: fadeIn 0.7s;
+}
+.resenas-title, .agregar-title {
+  color: #1976d2;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.no-resenas {
+  color: #888;
+  font-style: italic;
+  margin-bottom: 18px;
+}
+.resena-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-bottom: 18px;
+  padding: 18px 20px;
+  transition: box-shadow 0.2s;
+  animation: fadeInUp 0.7s;
+}
+.resena-card:hover {
+  box-shadow: 0 4px 16px rgba(25,118,210,0.10);
+}
+.resena-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.resena-avatar {
+  font-size: 32px;
+  color: #1976d2;
+}
+.resena-user-info {
+  display: flex;
+  flex-direction: column;
+}
+.resena-usuario {
+  font-weight: 500;
+  color: #1976d2;
+}
+.resena-stars {
+  margin-top: 2px;
+}
+.star {
+  font-size: 20px;
+  color: #bdbdbd;
+  transition: color 0.2s;
+}
+.star.filled {
+  color: #ffd600;
+}
+.stars-input {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.stars-input .star {
+  cursor: pointer;
+  font-size: 28px;
+  color: #bdbdbd;
+  transition: color 0.2s;
+}
+.stars-input .selected .star {
+  color: #ffd600;
+}
+.input-modern {
+  border: 1px solid #d0d7e6;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 15px;
+  transition: border 0.2s;
+}
+.input-modern:focus {
+  border: 1.5px solid #1976d2;
+  outline: none;
+}
+.btn-modern {
+  background: linear-gradient(90deg,#1976d2,#43a047);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+  transition: background 0.2s;
+}
+.btn-modern:hover {
+  background: linear-gradient(90deg,#1565c0,#388e3c);
+}
+.success, .error {
+  margin-top: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.success {
+  color: #43a047;
+}
+.error {
+  color: #e53935;
+}
+.resena-user-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #90caf9;
+  background: #fff;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fadeIn 0.7s;
+}

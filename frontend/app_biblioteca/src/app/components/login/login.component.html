@@ -1,0 +1,18 @@
+<div class="login login-container">
+  <h2><span class="material-icons login-icon">login</span> Iniciar Sesión</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="login-form-row">
+      <label><span class="material-icons">email</span> Email</label>
+      <input formControlName="usuario_email" type="email" required />
+    </div>
+    <div class="login-form-row">
+      <label><span class="material-icons">lock</span> Contraseña</label>
+      <input formControlName="usuario_contraseña" type="password" required />
+    </div>
+    <button type="submit" [disabled]="loginForm.invalid"><span class="material-icons">login</span> Ingresar</button>
+  </form>
+  <div *ngIf="error" class="error"><span class="material-icons">error</span> {{ error }}</div>
+  <div class="forgot-password-link">
+    <a routerLink="/forgot-password">¿Olvidaste tu contraseña?</a>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="register register-container">
+  <h2><span class="material-icons register-icon">person_add</span> Registro de Usuario</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="register-form-row">
+      <label><span class="material-icons">person</span> Nombre</label>
+      <input formControlName="usuario_nombre" type="text" required />
+    </div>
+    <div class="register-form-row">
+      <label><span class="material-icons">person</span> Apellido</label>
+      <input formControlName="usuario_apellido" type="text" required />
+    </div>
+    <div class="register-form-row">
+      <label><span class="material-icons">email</span> Email</label>
+      <input formControlName="usuario_email" type="email" required />
+    </div>
+    <div class="register-form-row">
+      <label><span class="material-icons">lock</span> Contraseña</label>
+      <input formControlName="usuario_contraseña" type="password" required />
+    </div>
+    <div class="register-form-row">
+      <label><span class="material-icons">call</span> Teléfono</label>
+      <input formControlName="usuario_telefono" type="text" required />
+    </div>
+    <button type="submit" [disabled]="registerForm.invalid"><span class="material-icons">person_add</span> Registrarse</button>
+  </form>
+  <div *ngIf="error" class="error"><span class="material-icons">error</span> {{ error }}</div>
+  <div *ngIf="success" class="success"><span class="material-icons">check_circle</span> {{ success }}</div>
+</div>

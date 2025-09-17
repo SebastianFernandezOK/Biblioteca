@@ -1,0 +1,355 @@
+.libro-detalle {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #f8fafc;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 32px 32px 24px 32px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1976d2;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+.libro-titulo-icon {
+  font-size: 2rem;
+  color: #1976d2;
+  vertical-align: middle;
+}
+
+.libro-img {
+  max-width: 180px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(25,118,210,0.10);
+}
+
+.libro-info-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.08rem;
+  color: #333;
+  margin-bottom: 7px;
+}
+
+.info-icon {
+  font-size: 1.2rem;
+  color: #90caf9;
+  vertical-align: middle;
+}
+
+.volver-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  background: none;
+  color: #1976d2;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.18s;
+}
+
+.volver-btn .material-icons {
+  font-size: 1.4rem;
+  vertical-align: middle;
+}
+
+.pedir-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 18px;
+  box-shadow: 0 2px 6px rgba(25,118,210,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.pedir-btn .material-icons {
+  font-size: 1.2rem;
+  vertical-align: middle;
+}
+
+.loading-icon, .error-icon, .success {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+.success .material-icons {
+  color: #43a047;
+}
+
+.error-icon .material-icons, .error .material-icons {
+  color: #e53935;
+}
+
+.libro-detalle-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 36px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.libro-img-grande {
+  max-width: 260px;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(25,118,210,0.13);
+  margin-bottom: 0;
+  background: #fff;
+}
+
+.libro-detalle-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.resena-form-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(25,118,210,0.10);
+  padding: 28px 32px 20px 32px;
+  margin-bottom: 32px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.resenas-list-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(25,118,210,0.08);
+  padding: 28px 32px 20px 32px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Resto de estilos modernos para reseñas y formulario */
+.resena-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-bottom: 18px;
+  padding: 18px 20px;
+  transition: box-shadow 0.2s;
+  animation: fadeInUp 0.7s;
+}
+.resena-card:hover {
+  box-shadow: 0 4px 16px rgba(25,118,210,0.10);
+}
+.resena-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.resena-avatar {
+  font-size: 32px;
+  color: #1976d2;
+}
+.resena-avatar span {
+  box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+}
+.resena-user-info {
+  display: flex;
+  flex-direction: column;
+}
+.resena-usuario {
+  font-weight: 500;
+  color: #1976d2;
+}
+.resena-stars {
+  margin-top: 2px;
+}
+.star {
+  font-size: 20px;
+  color: #bdbdbd;
+  transition: color 0.2s;
+}
+.star.filled {
+  color: #ffd600;
+}
+.stars-input {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.stars-input .star {
+  cursor: pointer;
+  font-size: 28px;
+  color: #bdbdbd;
+  transition: color 0.2s;
+}
+.stars-input .selected .star {
+  color: #ffd600;
+}
+.input-modern {
+  border: 1px solid #d0d7e6;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 15px;
+  transition: border 0.2s;
+}
+.input-modern:focus {
+  border: 1.5px solid #1976d2;
+  outline: none;
+}
+.btn-modern {
+  background: linear-gradient(90deg,#1976d2,#43a047);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+  transition: background 0.2s;
+}
+.btn-modern:hover {
+  background: linear-gradient(90deg,#1565c0,#388e3c);
+}
+.success, .error {
+  margin-top: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.success {
+  color: #43a047;
+}
+.error {
+  color: #e53935;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fadeIn 0.7s;
+}
+
+.resenas-flex-row {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+.resena-form-card {
+  flex: 1 1 320px;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(25,118,210,0.10);
+  padding: 28px 32px 20px 32px;
+}
+.resenas-list-card {
+  flex: 2 1 500px;
+  max-width: 600px;
+  background: #f8fafc;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(25,118,210,0.08);
+  padding: 28px 32px 20px 32px;
+}
+
+.resenas-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 32px;
+  align-items: center;
+}
+
+.resena-fecha {
+  font-size: 13px;
+  color: #888;
+  margin-top: 2px;
+}
+
+@media (max-width: 900px) {
+  .libro-detalle-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .libro-img-grande {
+    max-width: 80vw;
+  }
+  .libro-detalle-info {
+    min-width: 0;
+    width: 100%;
+  }
+  .resenas-flex-row {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .resena-form-card, .resenas-list-card {
+    max-width: 100%;
+    padding: 18px 10px;
+  }
+  .resenas-stack {
+    gap: 18px;
+    padding: 0 4px;
+  }
+}
+
+@media (max-width: 700px) {
+  .libro-detalle {
+    max-width: 98vw;
+    padding: 12px 4vw 10px 4vw;
+    font-size: 14px;
+  }
+  h2 {
+    font-size: 1.1rem;
+    gap: 4px;
+  }
+  .libro-img {
+    max-width: 90vw;
+    margin-bottom: 10px;
+  }
+  .libro-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    font-size: 0.98rem;
+  }
+}

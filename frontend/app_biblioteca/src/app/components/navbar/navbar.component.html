@@ -1,0 +1,47 @@
+<nav class="navbar">
+  <button class="navbar-hamburger" (click)="toggleMenu()" aria-label="Abrir menú">
+    <span class="material-icons">menu</span>
+  </button>
+  <div class="nav-left desktop-only">
+    <a *ngIf="authService.isLoggedIn()" routerLink="/libros" routerLinkActive="active"><span class="material-icons">menu_book</span> Libros</a>
+    <a *ngIf="authService.isLoggedIn() && !isBibliotecario()" routerLink="/prestamos" routerLinkActive="active"><span class="material-icons">assignment</span> Mis Préstamos</a>
+    <a *ngIf="isBibliotecario() || isAdmin()" routerLink="/admin-libros" routerLinkActive="active"><span class="material-icons">admin_panel_settings</span> Administración de Prestamos</a>
+    <a *ngIf="authService.isLoggedIn() && (isAdmin() || isBibliotecario())" routerLink="/admin-usuarios" routerLinkActive="active">
+      <span class="material-icons">manage_accounts</span> Administración de Usuarios
+    </a>
+  </div>
+  <div class="nav-right desktop-only">
+    <a *ngIf="authService.isLoggedIn()" routerLink="/notificaciones" routerLinkActive="active">
+      <span class="material-icons">notifications</span> Notificaciones
+    </a>
+    <a *ngIf="authService.isLoggedIn()" routerLink="/profile" routerLinkActive="active" class="navbar-profile-link">
+      <img [src]="getProfileImage()" alt="Foto de perfil" class="navbar-profile-img" />
+      Mi Perfil
+    </a>
+    <button *ngIf="authService.isLoggedIn()" (click)="logout()"><span class="material-icons">logout</span> Cerrar sesión</button>
+    <a *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active"><span class="material-icons">login</span> Login</a>
+    <a *ngIf="!authService.isLoggedIn()" routerLink="/register" routerLinkActive="active"><span class="material-icons">person_add</span> Registrarse</a>
+  </div>
+  <div class="navbar-menu" [class.abierto]="menuAbierto">
+    <div class="nav-left">
+      <a *ngIf="authService.isLoggedIn()" routerLink="/libros" routerLinkActive="active" (click)="cerrarMenu()"><span class="material-icons">menu_book</span> Libros</a>
+      <a *ngIf="authService.isLoggedIn() && !isBibliotecario()" routerLink="/prestamos" routerLinkActive="active" (click)="cerrarMenu()"><span class="material-icons">assignment</span> Mis Préstamos</a>
+      <a *ngIf="isBibliotecario() || isAdmin()" routerLink="/admin-libros" routerLinkActive="active" (click)="cerrarMenu()"><span class="material-icons">admin_panel_settings</span> Administración de Prestamos</a>
+      <a *ngIf="authService.isLoggedIn() && (isAdmin() || isBibliotecario())" routerLink="/admin-usuarios" routerLinkActive="active" (click)="cerrarMenu()">
+        <span class="material-icons">manage_accounts</span> Administración de Usuarios
+      </a>
+    </div>
+    <div class="nav-right">
+      <a *ngIf="authService.isLoggedIn()" routerLink="/notificaciones" routerLinkActive="active" (click)="cerrarMenu()">
+        <span class="material-icons">notifications</span> Notificaciones
+      </a>
+      <a *ngIf="authService.isLoggedIn()" routerLink="/profile" routerLinkActive="active" class="navbar-profile-link" (click)="cerrarMenu()">
+        <img [src]="getProfileImage()" alt="Foto de perfil" class="navbar-profile-img" />
+        Mi Perfil
+      </a>
+      <button *ngIf="authService.isLoggedIn()" (click)="logout(); cerrarMenu()"><span class="material-icons">logout</span> Cerrar sesión</button>
+      <a *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active" (click)="cerrarMenu()"><span class="material-icons">login</span> Login</a>
+      <a *ngIf="!authService.isLoggedIn()" routerLink="/register" routerLinkActive="active" (click)="cerrarMenu()"><span class="material-icons">person_add</span> Registrarse</a>
+    </div>
+  </div>
+</nav>

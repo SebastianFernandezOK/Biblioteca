@@ -1,0 +1,5 @@
+body, html {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3dafe 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}

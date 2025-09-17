@@ -1,0 +1,176 @@
+<div class="libros-container">
+  <h2 class="libros-title"><span class="material-icons libros-icon">menu_book</span> Lista de Libros</h2>
+  <!-- Botón agregar libro solo para bibliotecario -->
+  <div style="text-align:right; margin-bottom:16px;" *ngIf="authService.getUserRole() === 'bibliotecario' || authService.getUserRole() === 'admin'">
+    <button class="agregar-libro-btn" (click)="abrirAgregarLibro()">
+      <span class="material-icons">add_circle</span> Agregar Libro
+    </button>
+  </div>
+
+  <!-- Filtros para la búsqueda de libros -->
+  <div class="filtros-libros">
+    <span class="material-icons filtro-icon">search</span>
+    <input type="text" [(ngModel)]="filtroNombre" placeholder="Buscar por nombre..." (input)="filtrarLibros()" class="filtro-input"/>
+    <span class="material-icons filtro-icon">category</span>
+    <select [(ngModel)]="filtroGeneroID" (change)="filtrarLibros()" class="filtro-select">
+      <option value="">Todos los géneros</option>
+      <option *ngFor="let genero of generos" [value]="genero.generosID">{{ genero.nombre }}</option>
+    </select>
+  </div>
+
+  <div class="libros-grid">
+    <div class="libro-card" *ngFor="let libro of libros">
+      <div class="libro-img-container">
+        <img [src]="libro.image ? '/api/uploads/libros/' + libro.image : 'assets/default-cover.png'" (error)="onImgError($event)" alt="Portada" class="libro-img">
+      </div>
+      <div class="libro-info">
+        <h3 class="libro-titulo">
+          <span class="material-icons libro-titulo-icon">auto_stories</span>
+          {{ libro.titulo }}
+        </h3>
+        <div class="libro-meta">
+          <span class="libro-editorial"><span class="material-icons meta-icon">business</span> {{ libro.editorial }}</span>
+          <span class="libro-genero"><span class="material-icons meta-icon">category</span> {{ libro.genero_nombre }}</span>
+        </div>
+        <div class="libro-cantidad">
+          <span><span class="material-icons cantidad-icon">inventory_2</span> Cantidad: <b>{{ libro.cantidad }}</b></span>
+        </div>
+        <div class="libro-valoracion modern-valoracion">
+          <span class="material-icons valoracion-icon"
+            *ngFor="let star of [1,2,3,4,5]">
+            {{ getStarType(star, libro.promedio_valoracion) }}
+          </span>
+          <span class="valoracion-num">
+            {{ libro.promedio_valoracion ? libro.promedio_valoracion.toFixed(2) : '0.00' }} / 5
+          </span>
+        </div>
+        <button class="ver-detalles-btn" (click)="verDetalle(libro)"><span class="material-icons">info</span> Detalle</button>
+        <div class="libro-actions" *ngIf="authService.getUserRole() === 'bibliotecario' || authService.getUserRole() === 'admin'">
+          <button class="editar-libro-btn" (click)="abrirModalEditar(libro)"><span class="material-icons">edit</span> Editar</button>
+          <button class="eliminar-libro-btn" (click)="eliminarLibro(libro)" [disabled]="libro.cantidad <= 0">
+            <span class="material-icons">remove_circle</span> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE EDICIÓN MODERNO CON INPUTS CON ICONOS -->
+  <div class="modal-bg" *ngIf="libroEditando">
+    <div class="modal">
+      <button class="close-btn" type="button" (click)="cerrarModalEditar()">
+        <span class="material-icons">close</span>
+      </button>
+      <h3>
+        <span class="material-icons">edit</span>
+        Editar Libro
+      </h3>
+      <form [formGroup]="editForm" (ngSubmit)="guardarEdicion()">
+        <div class="input-group">
+          <label for="titulo">Título</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">title</span>
+            <input id="titulo" formControlName="titulo" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="editorial">Editorial</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">business</span>
+            <input id="editorial" formControlName="editorial" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="generoID">Género</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">category</span>
+            <select id="generoID" formControlName="generoID">
+              <option *ngFor="let genero of generos" [value]="genero.generosID">{{ genero.nombre }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="cantidad">Cantidad</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">inventory_2</span>
+            <input id="cantidad" formControlName="cantidad" type="number" min="0" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="image">Imagen</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">image</span>
+            <input id="image" type="file" (change)="onFileSelected($event)" />
+            <span *ngIf="libroEditando.image">Actual: {{ libroEditando.image }}</span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" [disabled]="editForm.invalid">Guardar</button>
+          <button type="button" (click)="cerrarModalEditar()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL AGREGAR LIBRO CON SUBIDA DE IMAGEN -->
+  <div class="modal-bg" *ngIf="mostrarModalAgregar">
+    <div class="modal">
+      <button class="close-btn" type="button" (click)="cerrarModalAgregar()">
+        <span class="material-icons">close</span>
+      </button>
+      <h3>
+        <span class="material-icons">add_circle</span>
+        Agregar Libro
+      </h3>
+      <form [formGroup]="agregarForm" (ngSubmit)="guardarNuevoLibro()" enctype="multipart/form-data">
+        <div class="input-group">
+          <label for="titulo">Título</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">title</span>
+            <input id="titulo" formControlName="titulo" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="editorial">Editorial</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">business</span>
+            <input id="editorial" formControlName="editorial" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="generoID">Género</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">category</span>
+            <select id="generoID" formControlName="generoID">
+              <option *ngFor="let genero of generos" [value]="genero.generosID">{{ genero.nombre }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="cantidad">Cantidad</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">inventory_2</span>
+            <input id="cantidad" formControlName="cantidad" type="number" min="0" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="image">Imagen</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">image</span>
+            <input id="image" type="file" (change)="onFileSelected($event)" />
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" [disabled]="agregarForm.invalid">Agregar</button>
+          <button type="button" (click)="cerrarModalAgregar()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button (click)="changePage(page - 1)" [disabled]="page === 1"><span class="material-icons">chevron_left</span> Anterior</button>
+    <span><span class="material-icons">menu</span> Página {{ page }} de {{ totalPages }}</span>
+    <button (click)="changePage(page + 1)" [disabled]="page === totalPages">Siguiente <span class="material-icons">chevron_right</span></button>
+  </div>
+</div>
