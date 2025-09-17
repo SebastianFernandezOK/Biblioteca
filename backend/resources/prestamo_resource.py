@@ -13,7 +13,8 @@ class PrestamoResource(Resource):
     def get(self):
         page = int(request.args.get('page', 1))
         per_page = int(request.args.get('per_page', 10))
-        pagination = PrestamoService.listar_prestamos_paginados(page, per_page)
+        libro = request.args.get('libro')
+        pagination = PrestamoService.listar_prestamos_paginados(page, per_page, libro)
         prestamos = [PrestamoSchema.object_to_json(p) for p in pagination.items]
         return {
             'prestamos': prestamos,
@@ -65,6 +66,14 @@ class PrestamoDetailResource(Resource):
         args = parser.parse_args()
         actualizado = False
         if args['estadoID'] is not None:
+            # Si se rechaza (estadoID=4) y estaba pendiente, devolver la cantidad al libro
+            if args['estadoID'] == 4 and prestamo.estadoID == 1:
+                from repositories.libro_repository import LibroRepository
+                libro = LibroRepository.get_by_id_simple(prestamo.libroID)
+                if libro:
+                    libro.cantidad += 1
+                    from database.connection import db
+                    db.session.add(libro)
             prestamo.estadoID = args['estadoID']
             actualizado = True
         if args['fecha_devuelta'] is not None:

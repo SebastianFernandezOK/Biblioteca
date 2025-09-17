@@ -127,25 +127,37 @@
 }
 
 .libro-editorial, .libro-genero {
-  background: #e3eafc;
+  background: linear-gradient(90deg, #e3eafc 0%, #fff 100%);
   color: #1976d2;
   border-radius: 999px;
   padding: 3px 14px;
   font-size: 0.99rem;
   font-weight: 600;
-  box-shadow: 0 1px 4px #e3eafc;
+  box-shadow: 0 1px 6px #e3eafc;
   border: 1px solid #bbdefb;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  transition: box-shadow 0.22s, background 0.22s, color 0.22s;
 }
-
-.libro-editorial {
-  background: #e3eafc;
-  color: #1976d2;
+.libro-editorial:hover {
+  background: linear-gradient(90deg, #90caf9 0%, #fff 100%);
+  color: #0d47a1;
+  box-shadow: 0 4px 16px #90caf9;
 }
-
 .libro-genero {
-  background: #e8f5e9;
+  background: linear-gradient(90deg, #e8f5e9 0%, #fff 100%);
   color: #388e3c;
   border: 1px solid #b2dfdb;
+}
+.libro-genero:hover {
+  background: linear-gradient(90deg, #b2dfdb 0%, #fff 100%);
+  color: #1b5e20;
+  box-shadow: 0 4px 16px #b2dfdb;
 }
 
 .libro-cantidad {
@@ -602,4 +614,43 @@ body, html {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.libro-autor.modern-autor {
+  background: linear-gradient(90deg, #f3e5f5 0%, #e3eafc 100%);
+  color: #6a1b9a;
+  border-radius: 999px;
+  padding: 3px 16px 3px 10px;
+  font-size: 1.01rem;
+  font-weight: 600;
+  box-shadow: 0 1px 6px #e1bee7;
+  border: 1px solid #ce93d8;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  transition: box-shadow 0.22s, background 0.22s, color 0.22s;
+}
+.libro-autor.modern-autor:hover {
+  background: linear-gradient(90deg, #ce93d8 0%, #e3eafc 100%);
+  color: #4a148c;
+  box-shadow: 0 4px 16px #ce93d8;
+}
+.autor-icon {
+  color: #ab47bc;
+  font-size: 1.2rem;
+  margin-right: 2px;
+}
+.autor-label {
+  font-weight: 500;
+  color: #7b1fa2;
+  margin-right: 3px;
+}
+.autor-nombre {
+  font-weight: 700;
+  color: #4a148c;
+  letter-spacing: 0.5px;
 }

@@ -1,4 +1,5 @@
 from models.prestamo_model import Prestamo
+from models.libro_model import Libro
 from database.connection import db  # Importa la instancia de SQLAlchemy correctamente
 
 class PrestamoRepository:
@@ -31,8 +32,12 @@ class PrestamoRepository:
         return Prestamo.query.filter_by(usuarioID=usuario_id).order_by(Prestamo.prestamoID.desc()).all()
 
     @staticmethod
-    def get_paged(page=1, per_page=10):
-        return Prestamo.query.order_by(Prestamo.prestamoID.desc()).paginate(page=page, per_page=per_page, error_out=False)
+    def get_paged(page=1, per_page=10, libro=None):
+        query = Prestamo.query.join(Libro, Prestamo.libroID == Libro.libroID)
+        if libro:
+            query = query.filter(Libro.titulo.ilike(f"%{libro}%"))
+        query = query.order_by(Prestamo.prestamoID.desc())
+        return query.paginate(page=page, per_page=per_page, error_out=False)
 
     @staticmethod
     def get_by_usuario_paged(usuario_id, page=1, per_page=5):

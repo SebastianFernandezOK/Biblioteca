@@ -15,7 +15,8 @@ class LibroResource(Resource):
         per_page = request.args.get('per_page', 10, type=int)
         search = request.args.get('search', None, type=str)
         generoID = request.args.get('generoID', None, type=str)
-        pagination = LibroService.get_paginated(page, per_page, search, generoID)
+        autor = request.args.get('autor', None, type=str)
+        pagination = LibroService.get_paginated(page, per_page, search, generoID, autor)
         # Adaptar para manejar Row, tupla o Libro
         libros = []
         for l in pagination.items:
@@ -42,6 +43,7 @@ class LibroResource(Resource):
         cantidad = request.form.get('cantidad', type=int)
         editorial = request.form.get('editorial')
         genero = request.form.get('genero')
+        autor = request.form.get('autor')
         image_file = request.files.get('image')
         if not (titulo and cantidad is not None and editorial and genero and image_file):
             return {"message": "Faltan datos o imagen"}, 400
@@ -57,7 +59,8 @@ class LibroResource(Resource):
             'cantidad': cantidad,
             'editorial': editorial,
             'genero': genero,
-            'image': filename
+            'image': filename,
+            'autor': autor
         }
         nuevo_libro = LibroService.create(args)
         return LibroSchema.object_to_json(nuevo_libro), 201
@@ -76,6 +79,7 @@ class LibroDetailResource(Resource):
         cantidad = request.form.get('cantidad', type=int)
         editorial = request.form.get('editorial')
         genero = request.form.get('genero')
+        autor = request.form.get('autor')
         image_file = request.files.get('image')
         # Si se sube una nueva imagen, la guardamos
         if image_file and image_file.filename:
@@ -92,7 +96,8 @@ class LibroDetailResource(Resource):
             'cantidad': cantidad,
             'editorial': editorial,
             'genero': genero,
-            'image': image
+            'image': image,
+            'autor': autor
         }
         actualizado = LibroService.update(libro_id, args)
         if actualizado:
@@ -103,6 +108,11 @@ class LibroDetailResource(Resource):
         eliminado = LibroService.delete(libro_id)
         if eliminado:
             return {"message": "Libro eliminado"}, 200
+        # Si no se eliminó, puede ser por préstamos pendientes/activos
+        from models.prestamo_model import Prestamo
+        prestamos = Prestamo.query.filter(Prestamo.libroID == libro_id, Prestamo.estadoID.in_([1, 2])).all()
+        if prestamos:
+            return {"message": "No se puede eliminar el libro porque tiene préstamos pendientes o activos."}, 400
         return {"message": "Libro no encontrado"}, 404
 
     def patch(self, libro_id):

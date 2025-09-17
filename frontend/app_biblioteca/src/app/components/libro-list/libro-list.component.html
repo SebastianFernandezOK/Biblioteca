@@ -10,7 +10,9 @@
   <!-- Filtros para la búsqueda de libros -->
   <div class="filtros-libros">
     <span class="material-icons filtro-icon">search</span>
-    <input type="text" [(ngModel)]="filtroNombre" placeholder="Buscar por nombre..." (input)="filtrarLibros()" class="filtro-input"/>
+    <input type="text" [(ngModel)]="filtroNombre" placeholder="Buscar por Titulo..." (input)="filtrarLibros()" class="filtro-input"/>
+    <span class="material-icons filtro-icon">person</span>
+    <input type="text" [(ngModel)]="filtroAutor" placeholder="Buscar por autor..." (input)="filtrarLibros()" class="filtro-input"/>
     <span class="material-icons filtro-icon">category</span>
     <select [(ngModel)]="filtroGeneroID" (change)="filtrarLibros()" class="filtro-select">
       <option value="">Todos los géneros</option>
@@ -31,6 +33,11 @@
         <div class="libro-meta">
           <span class="libro-editorial"><span class="material-icons meta-icon">business</span> {{ libro.editorial }}</span>
           <span class="libro-genero"><span class="material-icons meta-icon">category</span> {{ libro.genero_nombre }}</span>
+        </div>
+        <div class="libro-autor modern-autor">
+          <span class="material-icons meta-icon autor-icon">person</span>
+          <span class="autor-label">Autor:</span>
+          <span class="autor-nombre">{{ libro.autor }}</span>
         </div>
         <div class="libro-cantidad">
           <span><span class="material-icons cantidad-icon">inventory_2</span> Cantidad: <b>{{ libro.cantidad }}</b></span>
@@ -97,6 +104,13 @@
           </div>
         </div>
         <div class="input-group">
+          <label for="autor">Autor</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">person</span>
+            <input id="autor" formControlName="autor" />
+          </div>
+        </div>
+        <div class="input-group">
           <label for="image">Imagen</label>
           <div class="input-wrapper">
             <span class="material-icons input-icon">image</span>
@@ -151,6 +165,13 @@
           <div class="input-wrapper">
             <span class="material-icons input-icon">inventory_2</span>
             <input id="cantidad" formControlName="cantidad" type="number" min="0" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="autor">Autor</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">person</span>
+            <input id="autor" formControlName="autor" />
           </div>
         </div>
         <div class="input-group">

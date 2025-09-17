@@ -10,7 +10,7 @@ export class LibroService {
 
   constructor(private http: HttpClient) { }
 
-  getLibros(page: number = 1, perPage: number = 10, search: string = '', generoID: string = ''): Observable<any> {
+  getLibros(page: number = 1, perPage: number = 10, search: string = '', generoID: string = '', autor: string = ''): Observable<any> {
     let params = new HttpParams()
       .set('page', page)
       .set('per_page', perPage);
@@ -19,6 +19,9 @@ export class LibroService {
     }
     if (generoID) {
       params = params.set('generoID', generoID);
+    }
+    if (autor) {
+      params = params.set('autor', autor);
     }
     return this.http.get<any>(this.apiUrl, { params });
   }

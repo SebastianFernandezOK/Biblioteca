@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PrestamoService } from '../../services/prestamo.service';
 import { AuthService } from '../../services/auth.service';
+import { LibroService } from '../../services/libro.service';
 
 @Component({
   selector: 'app-admin-libros',
@@ -15,16 +16,34 @@ export class AdminLibrosComponent implements OnInit {
   per_page = 6;
   total = 0;
   pages = 1;
+  filtroLibro: string = '';
+  libros: any[] = [];
 
-  constructor(private prestamoService: PrestamoService, public authService: AuthService) {}
+  constructor(
+    private prestamoService: PrestamoService,
+    public authService: AuthService,
+    private libroService: LibroService
+  ) {}
 
   ngOnInit() {
+    this.cargarLibros();
     this.cargarPagina(this.page);
+  }
+
+  cargarLibros() {
+    this.libroService.getLibros(1, 1000).subscribe({
+      next: (data) => {
+        this.libros = data.libros || data.items || [];
+      },
+      error: () => {
+        this.libros = [];
+      }
+    });
   }
 
   cargarPagina(page: number) {
     this.loading = true;
-    this.prestamoService.getPrestamosPaginados(page, this.per_page).subscribe({
+    this.prestamoService.getPrestamosPaginados(page, this.per_page, this.filtroLibro).subscribe({
       next: (data) => {
         this.prestamos = data.prestamos;
         this.total = data.total;
@@ -37,6 +56,11 @@ export class AdminLibrosComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  onFiltroLibroChange() {
+    this.page = 1;
+    this.cargarPagina(this.page);
   }
 
   siguientePagina() {
@@ -89,6 +113,19 @@ export class AdminLibrosComponent implements OnInit {
       },
       error: () => {
         this.error = 'No se pudo actualizar la fecha del préstamo.';
+      }
+    });
+  }
+
+  rechazarPrestamo(prestamo: any) {
+    if (!confirm('¿Seguro que deseas rechazar este préstamo?')) return;
+    this.prestamoService.actualizarEstadoPrestamo(prestamo.prestamoID, 4).subscribe({
+      next: (actualizado: any) => {
+        prestamo.estadoID = actualizado.estadoID;
+        prestamo.estado_nombre = actualizado.estado_nombre;
+      },
+      error: () => {
+        this.error = 'No se pudo rechazar el préstamo.';
       }
     });
   }

@@ -76,6 +76,17 @@ export class AuthService {
     }
   }
 
+  get isAdmin(): boolean {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.rol === 'admin';
+    } catch {
+      return false;
+    }
+  }
+
   forgotPassword(email: string): Observable<any> {
     return this.http.post('/api/auth/forgot-password', { email });
   }

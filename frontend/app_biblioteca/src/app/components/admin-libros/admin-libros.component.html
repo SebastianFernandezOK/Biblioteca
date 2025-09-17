@@ -1,5 +1,11 @@
 <div class="admin-libros">
   <h2>Administración de Préstamos</h2>
+  <div class="filtros-admin-prestamos filtro-animado">
+    <label for="filtroLibro"><i class="fa fa-search"></i> Filtrar por libro:</label>
+    <input id="filtroLibro" type="text" [(ngModel)]="filtroLibro" (input)="onFiltroLibroChange()" placeholder="Escribe el nombre del libro..." class="input-filtro-animado" />
+    <span *ngIf="filtroLibro.length > 0" class="clear-filtro" (click)="filtroLibro=''; onFiltroLibroChange()" title="Limpiar filtro">&times;</span>
+    <div *ngIf="filtroLibro.length > 0" class="filtro-sombra"></div>
+  </div>
   <div *ngIf="loading">Cargando préstamos...</div>
   <div *ngIf="error">{{ error }}</div>
   <table *ngIf="!loading && prestamos.length">
@@ -30,14 +36,24 @@
         </td>
         <td>{{ p.fecha_devuelta ? (p.fecha_devuelta | date:'dd/MM/yyyy HH:mm') : 'No' }}</td>
         <td>
-          <select *ngIf="authService.isBibliotecario && !p.fecha_devuelta" [(ngModel)]="p.estadoID" (change)="cambiarEstado(p)">
+          <select *ngIf="authService.isBibliotecario && !p.fecha_devuelta" [(ngModel)]="p.estadoID" (change)="cambiarEstado(p)" [disabled]="p.estado_nombre && p.estado_nombre.trim() === 'Rechazado'">
             <option [value]="1">Pendiente</option>
             <option [value]="2">Activo</option>
+            <option [value]="4">Rechazado</option>
           </select>
-          <span *ngIf="!authService.isBibliotecario || p.fecha_devuelta">{{ p.estado_nombre }}</span>
+          <span *ngIf="!authService.isBibliotecario || p.fecha_devuelta" class="badge"
+                [ngClass]="{
+                  'badge-pendiente': p.estado_nombre && p.estado_nombre.trim() === 'Pendiente',
+                  'badge-activo': p.estado_nombre && p.estado_nombre.trim() === 'Activo',
+                  'badge-devuelto': p.estado_nombre && p.estado_nombre.trim() === 'Devuelto',
+                  'badge-rechazado': p.estado_nombre && p.estado_nombre.trim() === 'Rechazado'
+                }">
+            {{ p.estado_nombre ? p.estado_nombre.trim() : 'Sin estado' }}
+          </span>
         </td>
         <td>
           <button *ngIf="p.estadoID === 2 && !p.fecha_devuelta" (click)="marcarDevuelto(p)">Devuelto</button>
+          <button *ngIf="authService.isAdmin && p.estadoID === 1 && !p.fecha_devuelta" (click)="rechazarPrestamo(p)" class="rechazar-btn">Rechazar</button>
         </td>
       </tr>
     </tbody>

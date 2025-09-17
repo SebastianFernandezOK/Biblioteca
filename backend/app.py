@@ -1,11 +1,12 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from database.connection import db
 from mail.mail import init_mail
 from dotenv import load_dotenv
 from datetime import timedelta
+from apscheduler.schedulers.background import BackgroundScheduler
 # Importar y registrar todos los resources
 from resources.autor_resource import AutorResource, AutorDetailResource
 from resources.libro_resource import LibroResource, LibroDetailResource
@@ -18,6 +19,7 @@ from resources.auth_resource import AuthResource, ForgotPasswordResource, ResetP
 from resources.genero_resource import GeneroResource, GeneroDetailResource
 from resources.estado_resource import EstadoResource, EstadoDetailResource
 from resources.upload_resource import UploadResource
+from mail.email_notifier import notificar_prestamos_proximos_vencimiento
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -43,6 +45,10 @@ def add_claims_to_access_token(identity):
         'email': usuario.usuario_email if usuario else None
     }
 
+@app.route('/api/notificar_prestamos_vencimiento')
+def notificar_prestamos_vencimiento():
+    notificar_prestamos_proximos_vencimiento(mail)
+    return jsonify({'ok': True, 'msg': 'Notificaciones enviadas'})
 
 
 
@@ -83,5 +89,16 @@ api.add_resource(EstadoDetailResource, '/api/estados/<int:estadoID>')
 
 api.add_resource(UploadResource, '/api/uploads/<string:folder>/<string:filename>')
 
+def notificar_job():
+    with app.app_context():
+        notificar_prestamos_proximos_vencimiento(mail)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Iniciar el scheduler para notificaciones automáticas
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(notificar_job, 'interval', minutes=1440 )
+    scheduler.start()
+    try:
+        app.run(debug=True)
+    finally:
+        scheduler.shutdown()

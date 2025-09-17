@@ -15,6 +15,7 @@ export class LibroListComponent implements OnInit {
   generos: any[] = [];
   filtroGeneroID: string = '';
   filtroNombre: string = '';
+  filtroAutor: string = '';
   page: number = 1;
   perPage: number = 10;
   totalPages: number = 1;
@@ -27,7 +28,8 @@ export class LibroListComponent implements OnInit {
     editorial: [''],
     generoID: [''],
     cantidad: [0],
-    image: ['']
+    image: [''],
+    autor: ['']
   });
   selectedFile: File | null = null;
 
@@ -43,7 +45,8 @@ export class LibroListComponent implements OnInit {
       editorial: [''],
       generoID: [''],
       cantidad: [0],
-      image: ['']
+      image: [''],
+      autor: ['']
     });
   }
 
@@ -55,7 +58,7 @@ export class LibroListComponent implements OnInit {
   }
 
   getLibros(): void {
-    this.libroService.getLibros(this.page, this.perPage, this.filtroNombre, this.filtroGeneroID).subscribe(data => {
+    this.libroService.getLibros(this.page, this.perPage, this.filtroNombre, this.filtroGeneroID, this.filtroAutor).subscribe(data => {
       this.libros = data.items;
       this.totalPages = data.pages;
       this.total = data.total;
@@ -98,7 +101,8 @@ export class LibroListComponent implements OnInit {
       editorial: libro.editorial,
       generoID: libro.generoID,
       cantidad: libro.cantidad,
-      image: libro.image
+      image: libro.image,
+      autor: libro.autor
     });
   }
 
@@ -121,6 +125,7 @@ export class LibroListComponent implements OnInit {
     formData.append('editorial', datosCompatibles.editorial);
     formData.append('genero', datosCompatibles.genero);
     formData.append('cantidad', datosCompatibles.cantidad);
+    formData.append('autor', datosCompatibles.autor);
     // Si se seleccionó una nueva imagen, la enviamos; si no, enviamos el nombre actual
     if (this.selectedFile) {
       formData.append('image', this.selectedFile);
@@ -150,6 +155,7 @@ export class LibroListComponent implements OnInit {
     const editorial = this.agregarForm.get('editorial')?.value;
     const genero = this.agregarForm.get('generoID')?.value;
     const cantidad = this.agregarForm.get('cantidad')?.value;
+    const autor = this.agregarForm.get('autor')?.value;
     if (!titulo || !editorial || !genero || !cantidad || !this.selectedFile) {
       alert('Todos los campos y la imagen son obligatorios.');
       return;
@@ -159,6 +165,7 @@ export class LibroListComponent implements OnInit {
     formData.append('editorial', editorial);
     formData.append('genero', genero); // Cambiado a 'genero'
     formData.append('cantidad', cantidad);
+    formData.append('autor', autor);
     formData.append('image', this.selectedFile);
     this.libroService.agregarLibro(formData).subscribe((nuevoLibro) => {
       this.getLibros();
@@ -176,8 +183,17 @@ export class LibroListComponent implements OnInit {
       });
     } else if (libro.cantidad === 1) {
       // Si la cantidad es 1, el backend lo eliminará
-      this.libroService.actualizarCantidad(libro.libroID, 0).subscribe(() => {
-        this.getLibros();
+      this.libroService.actualizarCantidad(libro.libroID, 0).subscribe({
+        next: () => {
+          this.getLibros();
+        },
+        error: (err) => {
+          if (err && err.error && err.error.message && err.error.message.includes('préstamos')) {
+            alert('No se puede eliminar el libro porque tiene préstamos pendientes o activos.');
+          } else {
+            alert('No se pudo eliminar el libro.');
+          }
+        }
       });
     }
   }

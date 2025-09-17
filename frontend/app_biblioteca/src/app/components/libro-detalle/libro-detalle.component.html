@@ -16,7 +16,8 @@
         <div class="libro-info-row"><span class="material-icons info-icon">business</span> <b>Editorial:</b> {{ libro.editorial }}</div>
         <div class="libro-info-row"><span class="material-icons info-icon">category</span> <b>Género:</b> {{ libro.genero_nombre }}</div>
         <div class="libro-info-row"><span class="material-icons info-icon">inventory_2</span> <b>Cantidad:</b> {{ libro.cantidad }}</div>
-        <div class="libro-info-row"><span class="material-icons info-icon">tag</span> <b>ID:</b> {{ libro.libroID }}</div>
+        
+        <div class="libro-info-row"><span class="material-icons info-icon">person</span> <b>Autor:</b> {{ libro.autor }}</div>
         <div class="libro-info-row modern-valoracion">
           <span class="material-icons valoracion-icon" *ngFor="let star of [1,2,3,4,5]">
             {{ getStarType(star, libro.promedio_valoracion) }}

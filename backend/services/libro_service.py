@@ -11,8 +11,8 @@ class LibroService:
         return LibroRepository.get_all()
 
     @staticmethod
-    def get_paginated(page, per_page, search=None, generoID=None):
-        return LibroRepository.get_paginated(page, per_page, search, generoID)
+    def get_paginated(page, per_page, search=None, generoID=None, autor=None):
+        return LibroRepository.get_paginated(page, per_page, search, generoID, autor)
 
     @staticmethod
     def obtener_libro(libro_id):
@@ -39,7 +39,12 @@ class LibroService:
     @staticmethod
     def update(libro_id, data):
         print(f'PATCH update: libro_id={libro_id}, data={data}')  # Depuración
-        libro = LibroRepository.get_by_id(libro_id)
+        libro_obj = LibroRepository.get_by_id(libro_id)
+        # Si es una tupla (Libro, promedio), tomar solo el objeto Libro
+        if isinstance(libro_obj, tuple):
+            libro = libro_obj[0]
+        else:
+            libro = libro_obj
         if not libro:
             print('Libro no encontrado para actualizar cantidad')
             return None
@@ -84,7 +89,8 @@ class LibroService:
             editorial=args['editorial'],
             generoID=genero_id,
             genero=genero_obj,
-            image=args['image']
+            image=args['image'],
+            autor=args.get('autor')
         )
         try:
             libro_guardado = LibroRepository.create(nuevo_libro)
@@ -96,8 +102,19 @@ class LibroService:
 
     @staticmethod
     def delete(libro_id):
-        libro = LibroRepository.get_by_id(libro_id)
+        from models.prestamo_model import Prestamo
+        libro_obj = LibroRepository.get_by_id(libro_id)
+        # Si es una tupla (Libro, promedio), tomar solo el objeto Libro
+        if isinstance(libro_obj, tuple):
+            libro = libro_obj[0]
+        else:
+            libro = libro_obj
         if not libro:
+            return False
+        # Verificar si hay préstamos pendientes o activos
+        prestamos = Prestamo.query.filter(Prestamo.libroID == libro_id, Prestamo.estadoID.in_([1, 2])).all()
+        if prestamos:
+            # Hay préstamos pendientes o activos, no eliminar
             return False
         db.session.delete(libro)
         db.session.commit()

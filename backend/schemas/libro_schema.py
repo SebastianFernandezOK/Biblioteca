@@ -13,7 +13,8 @@ class LibroSchema:
             "editorial": libro.editorial,
             "generoID": libro.generoID,
             "genero_nombre": libro.genero.nombre if libro.genero else None,
-            "image": libro.image
+            "image": libro.image,
+            "autor": libro.autor
         }
         if promedio_valoracion is not None:
             data["promedio_valoracion"] = round(promedio_valoracion, 2)
@@ -27,5 +28,6 @@ class LibroSchema:
             cantidad=data.get("cantidad"),
             editorial=data.get("editorial"),
             generoID=data.get("generoID"),
-            image=data.get("image")
+            image=data.get("image"),
+            autor=data.get("autor")
         )

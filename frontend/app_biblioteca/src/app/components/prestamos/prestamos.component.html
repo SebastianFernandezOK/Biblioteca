@@ -23,7 +23,8 @@
                 [ngClass]="{
                   'badge-pendiente': p.estado_nombre && p.estado_nombre.trim() === 'Pendiente',
                   'badge-activo': p.estado_nombre && p.estado_nombre.trim() === 'Activo',
-                  'badge-devuelto': p.estado_nombre && p.estado_nombre.trim() === 'Devuelto'
+                  'badge-devuelto': p.estado_nombre && p.estado_nombre.trim() === 'Devuelto',
+                  'badge-rechazado': p.estado_nombre && p.estado_nombre.trim() === 'Rechazado'
                 }">
             {{ p.estado_nombre ? p.estado_nombre.trim() : 'Sin estado' }}
           </span>

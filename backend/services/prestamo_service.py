@@ -41,6 +41,12 @@ class PrestamoService:
 
     @staticmethod
     def eliminar_prestamo(prestamo):
+        # Si el préstamo está pendiente, devolver la cantidad al libro
+        if prestamo.estadoID == 1:  # 1 = Pendiente
+            libro = LibroRepository.get_by_id_simple(prestamo.libroID)
+            if libro:
+                libro.cantidad += 1
+                db.session.add(libro)
         PrestamoRepository.delete(prestamo)
 
     @staticmethod
@@ -69,8 +75,8 @@ class PrestamoService:
         return PrestamoRepository.get_by_id(prestamo_id)
 
     @staticmethod
-    def listar_prestamos_paginados(page=1, per_page=10):
-        return PrestamoRepository.get_paged(page, per_page)
+    def listar_prestamos_paginados(page=1, per_page=10, libro=None):
+        return PrestamoRepository.get_paged(page, per_page, libro)
 
     @staticmethod
     def listar_prestamos_por_usuario_paginados(usuario_id, page=1, per_page=5):

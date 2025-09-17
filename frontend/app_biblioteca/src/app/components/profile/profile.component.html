@@ -7,9 +7,7 @@
     </div>
     <!-- Datos actuales o editables -->
     <form *ngIf="editMode" [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-edit-form" enctype="multipart/form-data">
-      <div class="profile-info-row">
-        <span class="material-icons info-icon">badge</span> <b>ID:</b> {{ usuario.usuarioID }}
-      </div>
+      
       <div class="profile-info-row">
         <span class="material-icons info-icon">person</span> <b>Nombre:</b>
         <input formControlName="usuario_nombre" type="text" />
@@ -39,7 +37,7 @@
       <div *ngIf="error" class="error"><span class="material-icons">error</span> {{ error }}</div>
     </form>
     <ng-container *ngIf="!editMode">
-      <div class="profile-info-row"><span class="material-icons info-icon">badge</span> <b>ID:</b> {{ usuario.usuarioID }}</div>
+      
       <div class="profile-info-row"><span class="material-icons info-icon">person</span> <b>Nombre:</b> {{ usuario.usuario_nombre }}</div>
       <div class="profile-info-row"><span class="material-icons info-icon">person</span> <b>Apellido:</b> {{ usuario.usuario_apellido }}</div>
       <div class="profile-info-row"><span class="material-icons info-icon">email</span> <b>Email:</b> {{ usuario.usuario_email }}</div>

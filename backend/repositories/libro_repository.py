@@ -7,7 +7,7 @@ class LibroRepository:
         return Libro.query.all()
 
     @staticmethod
-    def get_paginated(page, per_page, search=None, generoID=None):
+    def get_paginated(page, per_page, search=None, generoID=None, autor=None):
         from models.resena_model import Resena
         from sqlalchemy import func
         query = db.session.query(
@@ -18,6 +18,8 @@ class LibroRepository:
             query = query.filter(Libro.titulo.ilike(f"%{search}%"))
         if generoID:
             query = query.filter(Libro.generoID == generoID)
+        if autor:
+            query = query.filter(Libro.autor.ilike(f"%{autor}%"))
         query = query.group_by(Libro.libroID).order_by(func.avg(Resena.valoracion).desc())
         # Paginación manual
         total = query.count()
