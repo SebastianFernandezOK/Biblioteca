@@ -1,0 +1,33 @@
+El siguiente relevamiento surge de una charla con un cliente al cual se le debe aplicar una
+solución tecnológica:
+Cliente: Soy el dueño de una biblioteca que actualmente administra la mayoría de sus
+registros y préstamos en documentos físicos y hojas de cálculo, lo que genera muchos
+problemas de seguimiento y organización. A menudo perdemos información o la
+sobrescribimos al realizar actualizaciones.
+¿Cómo se imagina una posible solución?
+Cliente: Imagino una plataforma web que me permita acceder al sistema como
+administrador. Desde allí, me gustaría tener la capacidad de agregar, editar o suspender
+libros. También me gustaría poder ver un registro de préstamos por libro y poder
+modificarlos o eliminarlos según sea necesario.
+¿Qué funciones cree que podrían realizar los bibliotecarios en el sistema?
+Cliente: Los bibliotecarios deben poder gestionar los préstamos de libros(tiempo de
+devolución), registrar nuevos libros en el sistema, y editar o eliminar información de libros
+existentes.
+¿Qué es lo primero que debería mostrar la página al ingresar?
+Cliente: La página inicial debería mostrar un catálogo de libros mejor valorados por los
+usuarios(organizado por los mas valorados hasta los menos valorados).
+¿Tiene pensado almacenar algún otro dato relacionado con los usuarios?
+Cliente: Me gustaría que los usuarios se registren por sus propios medios, contemplando al
+menos el nombre completo, teléfono y dirección de correo electrónico quedando en un
+estado de pre-confirmación. El bibliotecario será quien cambie el estado a usuario habilitado
+una vez retirado el primer ejemplar. Por otro lado el email permitirá comunicarnos en el
+futuro si es necesario(devoluciones vencidas).
+¿Qué funciones cree que podrían tener los usuarios del sistema?
+Cliente: Los usuarios deberían poder ver el catálogo de libros, buscar libros por título, autor
+o género, y solicitar préstamos de libros disponibles.
+¿Hay algún requisito importante que no hayamos discutido?
+Cliente: Sí, la plataforma debe ser completamente responsive y compatible con diferentes
+dispositivos, especialmente teléfonos móviles.
+Finalmente, los bibliotecarios y el administrador deberían tener la capacidad de suspender a
+los usuarios en caso de atrasos en la devolución de los libros, lo que les impedirá solicitar
+nuevos préstamos.
