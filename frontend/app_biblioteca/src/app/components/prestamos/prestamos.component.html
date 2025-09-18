@@ -2,10 +2,10 @@
   <h2>Mis Préstamos Activos</h2>
   <div *ngIf="loading">Cargando préstamos...</div>
   <div *ngIf="error">{{ error }}</div>
-  <table *ngIf="!loading && prestamos.length">
+  <!-- Tabla en escritorio -->
+  <table class="prestamos-table" *ngIf="!loading && prestamos.length">
     <thead>
       <tr>
-        
         <th>Libro</th>
         <th>Fecha Entrega</th>
         <th>Fecha Devolución</th>
@@ -14,7 +14,6 @@
     </thead>
     <tbody>
       <tr *ngFor="let p of prestamos">
-        
         <td>{{ p.libro_titulo }}</td>
         <td>{{ p.fecha_entrega | date:'dd/MM/yyyy' }}</td>
         <td>{{ p.fecha_devolucion | date:'dd/MM/yyyy' }}</td>
@@ -32,6 +31,27 @@
       </tr>
     </tbody>
   </table>
+
+  <!-- Tarjetas en móvil -->
+  <div class="prestamo-cards" *ngIf="!loading && prestamos.length">
+    <div class="prestamo-card" *ngFor="let p of prestamos">
+      <div class="prestamo-card-row"><b>Libro:</b> {{ p.libro_titulo }}</div>
+      <div class="prestamo-card-row"><b>Fecha Entrega:</b> {{ p.fecha_entrega | date:'dd/MM/yyyy' }}</div>
+      <div class="prestamo-card-row"><b>Fecha Devolución:</b> {{ p.fecha_devolucion | date:'dd/MM/yyyy' }}</div>
+      <div class="prestamo-card-row">
+        <b>Estado:</b>
+        <span class="badge"
+              [ngClass]="{
+                'badge-pendiente': p.estado_nombre && p.estado_nombre.trim() === 'Pendiente',
+                'badge-activo': p.estado_nombre && p.estado_nombre.trim() === 'Activo',
+                'badge-devuelto': p.estado_nombre && p.estado_nombre.trim() === 'Devuelto',
+                'badge-rechazado': p.estado_nombre && p.estado_nombre.trim() === 'Rechazado'
+              }">
+          {{ p.estado_nombre ? p.estado_nombre.trim() : 'Sin estado' }}
+        </span>
+      </div>
+    </div>
+  </div>
   <div *ngIf="!loading && !prestamos.length">No tienes préstamos activos.</div>
 
   <div class="pagination simple-pagination" *ngIf="pages > 1 || (!loading && prestamos.length > 0)">

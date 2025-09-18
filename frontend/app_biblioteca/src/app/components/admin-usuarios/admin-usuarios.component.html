@@ -27,7 +27,7 @@
   </div>
 
   <div class="table-wrapper">
-    <table *ngIf="!loading && usuarios.length">
+    <table class="admin-usuarios-table" *ngIf="!loading && usuarios.length">
       <thead>
         <tr>
           <th>Datos</th>
@@ -78,6 +78,46 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Tarjetas en móvil -->
+  <div class="admin-usuario-cards" *ngIf="!loading && usuarios.length">
+    <div class="admin-usuario-card" *ngFor="let u of usuarios; let i = index">
+      <div class="admin-usuario-card-row" *ngIf="editIndex !== i">
+        <b>Nombre:</b> {{ u.usuario_nombre }}
+      </div>
+      <div class="admin-usuario-card-row" *ngIf="editIndex !== i">
+        <b>Apellido:</b> {{ u.usuario_apellido }}
+      </div>
+      <div class="admin-usuario-card-row" *ngIf="editIndex !== i">
+        <b>Email:</b> {{ u.usuario_email }}
+      </div>
+      <div class="admin-usuario-card-row" *ngIf="editIndex !== i">
+        <b>Teléfono:</b> {{ u.usuario_telefono }}
+      </div>
+      <div class="admin-usuario-card-row" *ngIf="editIndex !== i">
+        <b>Rol:</b> <span class="badge-rol" [ngClass]="u.rol ? u.rol : 'pendiente'">{{ u.rol || 'Pendiente' }}</span>
+      </div>
+      <div class="admin-usuario-card-row acciones-columna" *ngIf="editIndex !== i">
+        <button class="btn-accion" (click)="iniciarEdicion(i)"><span class="material-icons">edit</span> Editar</button>
+        <button class="btn-accion" (click)="eliminarUsuario(i)"><span class="material-icons">delete</span> Eliminar</button>
+      </div>
+      <!-- Edición -->
+      <div *ngIf="editIndex === i">
+        <input [(ngModel)]="editUsuario.usuario_nombre" placeholder="Nombre" name="editNombreCard{{i}}" />
+        <input [(ngModel)]="editUsuario.usuario_apellido" placeholder="Apellido" name="editApellidoCard{{i}}" />
+        <input [(ngModel)]="editUsuario.usuario_email" placeholder="Email" name="editEmailCard{{i}}" />
+        <input [(ngModel)]="editUsuario.usuario_telefono" placeholder="Teléfono" name="editTelCard{{i}}" />
+        <select [(ngModel)]="editUsuario.rol" name="editRolCard{{i}}">
+          <option value="">Pendiente</option>
+          <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+        </select>
+        <div class="acciones-columna">
+          <button class="btn-accion" (click)="guardarEdicion(i)"><span class="material-icons">save</span> Guardar</button>
+          <button class="btn-accion" (click)="cancelarEdicion()"><span class="material-icons">close</span> Cancelar</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="paginacion-usuarios" *ngIf="total > per_page">
     <button class="btn-paginacion-clasica" (click)="cambiarPagina(-1)" [disabled]="page === 1 || loading">Anterior</button>

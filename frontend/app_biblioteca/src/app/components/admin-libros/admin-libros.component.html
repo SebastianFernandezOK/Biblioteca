@@ -8,10 +8,10 @@
   </div>
   <div *ngIf="loading">Cargando préstamos...</div>
   <div *ngIf="error">{{ error }}</div>
-  <table *ngIf="!loading && prestamos.length">
+  <!-- Tabla en escritorio -->
+  <table class="admin-prestamos-table" *ngIf="!loading && prestamos.length">
     <thead>
       <tr>
-        
         <th>Libro</th>
         <th>Usuario</th>
         <th>Fecha Entrega</th>
@@ -23,7 +23,6 @@
     </thead>
     <tbody>
       <tr *ngFor="let p of prestamos">
-        
         <td>{{ p.libro_titulo }}</td>
         <td>{{ p.usuario_nombre }} {{ p.usuario_apellido }}</td>
         <td>
@@ -58,6 +57,56 @@
       </tr>
     </tbody>
   </table>
+
+  <!-- Tarjetas en móvil -->
+  <div class="admin-prestamo-cards" *ngIf="!loading && prestamos.length">
+    <div class="admin-prestamo-card" *ngFor="let p of prestamos">
+      <div class="admin-prestamo-card-row"><b>Libro:</b> {{ p.libro_titulo }}</div>
+      <div class="admin-prestamo-card-row"><b>Usuario:</b> {{ p.usuario_nombre }} {{ p.usuario_apellido }}</div>
+      <div class="admin-prestamo-card-row">
+        <b>Fecha Entrega:</b>
+        <ng-container *ngIf="authService.isBibliotecario && !p.fecha_devuelta; else fechaEntregaTexto">
+          <input type="date" [value]="p.fecha_entrega | date:'yyyy-MM-dd'" (change)="actualizarFecha(p, 'fecha_entrega', $event)" />
+        </ng-container>
+        <ng-template #fechaEntregaTexto>{{ p.fecha_entrega | date:'dd/MM/yyyy' }}</ng-template>
+      </div>
+      <div class="admin-prestamo-card-row">
+        <b>Fecha Devolución:</b>
+        <ng-container *ngIf="authService.isBibliotecario && !p.fecha_devuelta; else fechaDevolucionTexto">
+          <input type="date" [value]="p.fecha_devolucion | date:'yyyy-MM-dd'" (change)="actualizarFecha(p, 'fecha_devolucion', $event)" />
+        </ng-container>
+        <ng-template #fechaDevolucionTexto>{{ p.fecha_devolucion | date:'dd/MM/yyyy' }}</ng-template>
+      </div>
+      <div class="admin-prestamo-card-row"><b>Devuelto:</b> {{ p.fecha_devuelta ? (p.fecha_devuelta | date:'dd/MM/yyyy HH:mm') : 'No' }}</div>
+      <div class="admin-prestamo-card-row">
+        <b>Estado:</b>
+        <ng-container *ngIf="authService.isBibliotecario && !p.fecha_devuelta; else estadoTexto">
+          <select [(ngModel)]="p.estadoID" (change)="cambiarEstado(p)" [disabled]="p.estado_nombre && p.estado_nombre.trim() === 'Rechazado'">
+            <option [value]="1">Pendiente</option>
+            <option [value]="2">Activo</option>
+            <option [value]="4">Rechazado</option>
+          </select>
+        </ng-container>
+        <ng-template #estadoTexto>
+          <span class="badge"
+                [ngClass]="{
+                  'badge-pendiente': p.estado_nombre && p.estado_nombre.trim() === 'Pendiente',
+                  'badge-activo': p.estado_nombre && p.estado_nombre.trim() === 'Activo',
+                  'badge-devuelto': p.estado_nombre && p.estado_nombre.trim() === 'Devuelto',
+                  'badge-rechazado': p.estado_nombre && p.estado_nombre.trim() === 'Rechazado'
+                }">
+            {{ p.estado_nombre ? p.estado_nombre.trim() : 'Sin estado' }}
+          </span>
+        </ng-template>
+      </div>
+      <div class="admin-prestamo-card-row" *ngIf="p.estadoID === 2 && !p.fecha_devuelta">
+        <button (click)="marcarDevuelto(p)">Devuelto</button>
+      </div>
+      <div class="admin-prestamo-card-row" *ngIf="authService.isAdmin && p.estadoID === 1 && !p.fecha_devuelta">
+        <button (click)="rechazarPrestamo(p)" class="rechazar-btn">Rechazar</button>
+      </div>
+    </div>
+  </div>
   <div *ngIf="!loading && !prestamos.length">No hay préstamos registrados.</div>
   <div class="paginacion" *ngIf="pages > 1 && !loading">
     <button (click)="anteriorPagina()" [disabled]="page === 1">Anterior</button>

@@ -1,3 +1,51 @@
+/* Tarjeta de perfil para móvil */
+@media (max-width: 600px) {
+  .profile {
+    max-width: 99vw;
+    padding: 8px 2vw 10px 2vw;
+    font-size: 14px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+    margin: 16px 0;
+  }
+  .profile-info-row, .profile-edit-form .profile-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    font-size: 0.98rem;
+    margin-bottom: 10px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 8px 10px;
+    box-shadow: 0 1px 4px rgba(25, 118, 210, 0.07);
+  }
+  .profile-edit-form {
+    padding: 10px 6px 8px 6px;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(25, 118, 210, 0.10);
+  }
+  .profile-img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 8px;
+  }
+  .profile-img-mini {
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+  }
+  button, .btn-guardar, .btn-cancelar, .btn-editar {
+    font-size: 13px;
+    padding: 8px 0;
+    margin-top: 8px;
+    border-radius: 6px;
+  }
+  h2 {
+    font-size: 1.1rem;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+}
 .profile {
   max-width: 400px;
   margin: 40px auto;

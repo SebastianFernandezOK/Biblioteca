@@ -11,9 +11,7 @@
     </a>
   </div>
   <div class="nav-right desktop-only">
-    <a *ngIf="authService.isLoggedIn()" routerLink="/notificaciones" routerLinkActive="active">
-      <span class="material-icons">notifications</span> Notificaciones
-    </a>
+   
     <a *ngIf="authService.isLoggedIn()" routerLink="/profile" routerLinkActive="active" class="navbar-profile-link">
       <img [src]="getProfileImage()" alt="Foto de perfil" class="navbar-profile-img" />
       Mi Perfil
@@ -32,9 +30,7 @@
       </a>
     </div>
     <div class="nav-right">
-      <a *ngIf="authService.isLoggedIn()" routerLink="/notificaciones" routerLinkActive="active" (click)="cerrarMenu()">
-        <span class="material-icons">notifications</span> Notificaciones
-      </a>
+      
       <a *ngIf="authService.isLoggedIn()" routerLink="/profile" routerLinkActive="active" class="navbar-profile-link" (click)="cerrarMenu()">
         <img [src]="getProfileImage()" alt="Foto de perfil" class="navbar-profile-img" />
         Mi Perfil
